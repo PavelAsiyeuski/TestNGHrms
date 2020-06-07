@@ -1,11 +1,14 @@
 package com.hrms.testcases;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.hrms.testbase.PageInitializer;
+import com.hrms.utils.CommonMethods;
 
-public class LoginTest extends PageInitializer{
+public class LoginTest extends CommonMethods{
 
 	
 //	@BeforeMethod
@@ -19,7 +22,7 @@ public class LoginTest extends PageInitializer{
 //		tearDown();
 //	}
 	
-	@Test 
+	@Test (groups="smoke")
 	public void validAdminLogin() {
 		login.login("Admin","Hum@nhrm123");
 		wait(2);
@@ -28,7 +31,7 @@ public class LoginTest extends PageInitializer{
 		Assert.assertEquals(actualText,expectedText,"Admin is not Logged In");
 	}
 	
-	@Test 
+	@Test (groups="regression")
 	public void invalidAdminLogin() {
 		login.login("Admin","dfsdgfdsf");
 		wait(2);
@@ -37,11 +40,19 @@ public class LoginTest extends PageInitializer{
 		Assert.assertEquals(actualText,expectedText,"Error message is not correct");
 	}
 	
-	@Test 
+	@Test (groups="regression")
 	public void emptyUsername () {
 		login.login("","sdfsdffdsf");
 		String expectedText="Username cannot be empty";
 		String actualText=login.errorMsg.getText();
 		Assert.assertEquals(actualText,expectedText,"Error message is not correct");
+	}
+	
+	@Test 
+	public void timeStamp() {
+		Date d=new Date();
+		d.getTime();
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		sdf.format(d.getTime());
 	}
 }

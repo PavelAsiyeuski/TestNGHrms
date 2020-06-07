@@ -2,6 +2,8 @@ package com.hrms.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -17,9 +19,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.hrms.testbase.BaseClass;
+import com.hrms.testbase.PageInitializer;
 
-public class CommonMethods extends BaseClass{
+public class CommonMethods extends PageInitializer{
 /**
  * method that clears and sends keys
  * @param element
@@ -171,16 +173,17 @@ public class CommonMethods extends BaseClass{
 		getJSObject().executeScript("window.scrollBy(0,-"+pixel+")");
 	}
 	
-	public static void takeScreenshot(String filename) {
-		TakesScreenshot ts=(TakesScreenshot)  driver;
-		File file = ts.getScreenshotAs(OutputType.FILE);
-		try {
-		FileUtils.copyFile(file,new File("screenshot/"+filename+".png"));
-		}catch (IOException ie) {
-			ie.printStackTrace();
+		public static String takeScreenshot(String filename) {
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File file = ts.getScreenshotAs(OutputType.FILE);
+			String destinationFile = Constants.SCREENSHOT_FILEPATH + filename + getTimeStemp() + ".png";
+			try {
+				FileUtils.copyFile(file, new File(destinationFile));
+			} catch (Exception ex) {
+				System.out.println("Cannot take screenshot!");
+			}
+			return destinationFile;
 		}
-	
-	}
 	
 	public static void wait(int second) {
 		try {
@@ -188,5 +191,11 @@ public class CommonMethods extends BaseClass{
 		}catch(InterruptedException ie) {
 			ie.printStackTrace();
 		}
+	}
+	
+	public static String getTimeStemp() {
+		Date d=new Date();
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		return sdf.format(d.getTime());
 	}
 }
